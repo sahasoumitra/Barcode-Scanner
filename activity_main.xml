@@ -1,37 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.myappcompany.keka.qrscannerzx.MainActivity">-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.myappcompany.keka.qrscannerzx.MainActivity" >
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.myappcompany.keka.barcodescaner.MainActivity">
-
-    <!-- Barcode Reader fragment -->
-    <fragment
-        android:id="@+id/barcodeFragment"
-        android:name="info.androidhive.barcode.BarcodeReader"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:auto_focus="true"
-        app:use_flash="false" />
-
-    <!-- Scanner overlay animation -->
-    <info.androidhive.barcode.ScannerOverlay
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#44000000"
-        app:line_color="#7323DC"
-        app:line_speed="6"
-        app:line_width="8"
-        app:square_height="400"
-        app:square_width="400" />
-
-    <TextView
-        android:id="@+id/scannedResultTextView"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonScan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Scan QR Code" />
 
 </RelativeLayout>
+
+<!--
+</android.support.constraint.ConstraintLayout>
+-->
