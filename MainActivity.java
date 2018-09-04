@@ -48,17 +48,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, "Result Not Found", Toast.LENGTH_LONG).show();
             } else {
                 //if qr contains data
-               // try {
+                /*try {
                     //converting the data to json
-                    //JSONObject obj = new JSONObject(result.getContents());
+                    JSONObject obj = new JSONObject(result.getContents());*/
                     //setting values to textviews
-                    //textViewName.setText(obj.getString("name"));
-                    String textResult = result.getContents().replaceAll("[\\t\\n\\r]+"," ");
-                Log.i("KK:values", "onActivityResult: result:" +textResult);
-                    textViewName.setText(textResult);
+                    //textViewName.setText(obj.getString("name ") + obj.getString("address"));
+                textViewName.setText(result.getContents());
+                Log.i("KK:values", "onActivityResult: result:" +result.getContents());
+                   // textViewName.setText(textResult);
                 //Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
 
-                /*} catch (JSONException e) {
+/*} catch (JSONException e) {
                     e.printStackTrace();
                     //if control comes here
                     //that means the encoded format not matches
@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //to a toast
                     Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
                 }*/
+
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -74,6 +75,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        qrScan.setPrompt("Scan a barcode");
+        qrScan.setCameraId(0);  // Use a specific camera of the device
+        qrScan.setOrientationLocked(true);
+        qrScan.setBeepEnabled(true);
+
+        //qrScan.setOrientationLocked(true);
         //initiating the qr code scan
         qrScan.initiateScan();
     }
