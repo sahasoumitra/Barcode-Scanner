@@ -1,95 +1,80 @@
-package com.myappcompany.keka.barcodescaner;
+package com.myappcompany.keka.qrscannerzx;
 
-/**
- * Created by Keka on 01-09-2018.
- */
-
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.SparseArray;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.vision.barcode.Barcode;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
-import java.util.List;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import info.androidhive.barcode.BarcodeReader;
-
-public class MainActivity extends AppCompatActivity implements BarcodeReader.BarcodeReaderListener {
-
-    private BarcodeReader barcodeReader;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    //View Objects
+    private Button buttonScan;
+    private TextView textViewName;
+    //qr code scanner object
+    private IntentIntegrator qrScan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //getting barcode instance
-        barcodeReader = (BarcodeReader) getSupportFragmentManager().findFragmentById(R.id.barcodeFragment);
+        //View objects
+        buttonScan = (Button) findViewById(R.id.buttonScan);
+        textViewName = (TextView) findViewById(R.id.textViewName);
+
+        //intializing scan object
+        qrScan = new IntentIntegrator(this);
+
+        //attaching onclick listener
+        buttonScan.setOnClickListener(this);
     }
 
+    //Getting the scan results
     @Override
-    public void onScanned(final Barcode barcode) {
-        // single barcode scanned
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            //if qrcode has nothing in it
+            if (result.getContents() == null) {
+                Toast.makeText(this, "Result Not Found", Toast.LENGTH_LONG).show();
+            } else {
+                //if qr contains data
+               // try {
+                    //converting the data to json
+                    //JSONObject obj = new JSONObject(result.getContents());
+                    //setting values to textviews
+                    //textViewName.setText(obj.getString("name"));
+                    String textResult = result.getContents().replaceAll("[\\t\\n\\r]+"," ");
+                Log.i("KK:values", "onActivityResult: result:" +textResult);
+                    textViewName.setText(textResult);
+                //Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
 
-        Log.i("value", "onScanned: DisplayValue: " +barcode.displayValue);
-        barcodeReader.playBeep();
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-               /* TextView scannedResultTextView = (TextView) findViewById(R.id.scannedResultTextView);
-                scannedResultTextView.setText("Barcode: " +barcode.displayValue);*/
-
-                Toast.makeText(getApplicationContext(), "Barcode: " +barcode.displayValue,
-                        Toast.LENGTH_SHORT).show();
-
+                /*} catch (JSONException e) {
+                    e.printStackTrace();
+                    //if control comes here
+                    //that means the encoded format not matches
+                    //in this case you can display whatever data is available on the qrcode
+                    //to a toast
+                    Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
+                }*/
             }
-        });
-    }
-
-    @Override
-    public void onScannedMultiple(List<Barcode> barcodes) {
-        // multiple barcodes scanned
-        Log.e("info", "onScannedMultiple: " + barcodes.size());
-
-        String codes = "";
-        for (Barcode barcode : barcodes) {
-            codes += barcode.displayValue + ", ";
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
-
-        final String finalCodes = codes;
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-                Toast.makeText(getApplicationContext(), "Barcodes: " + finalCodes, Toast.LENGTH_SHORT).show();
-
-                TextView scannedResultTextView = (TextView) findViewById(R.id.scannedResultTextView);
-                scannedResultTextView.setText( "Barcodes: " + finalCodes);
-            }
-        });
     }
 
     @Override
-    public void onBitmapScanned(SparseArray<Barcode> sparseArray) {
-        Log.i("info", "onBitmapScanned: ");
-        // barcode scanned from bitmap image
+    public void onClick(View view) {
+        //initiating the qr code scan
+        qrScan.initiateScan();
     }
-
-    @Override
-    public void onScanError(String s) {
-        Log.i("info", "onScanError: ");
-        // scan error
-    }
-
-    @Override
-    public void onCameraPermissionDenied() {
-        // camera permission denied
-        Toast.makeText(getApplicationContext(), "Camera permission denied",
-                Toast.LENGTH_SHORT).show();
-    }
-
 }
